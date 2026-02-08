@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  age           Int
+  location      String    @default("Victoria, Australia")
+  agreedToTerms Boolean   @default(false)
+  termsAgreedAt DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Rate limiting
+  dailyMessageCount   Int      @default(0)
+  dailyMessageResetAt DateTime @default(now())
+  weeklyConvoCount    Int      @default(0)
+  weeklyConvoResetAt  DateTime @default(now())
+
+  conversations Conversation[]
+  crisisFlags   CrisisFlag[]
+  usageLogs     UsageLog[]
+
+  @@index([email])
+}
+
+model Conversation {
+  id     String  @id @default(cuid())
+  userId String
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title  String?
+
+  // Context management for cost optimization
+  summaryText   String?   @db.Text
+  lastSummaryAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages Message[]
+
+  @@index([userId, createdAt])
+  @@index([userId, updatedAt])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String // "user" | "assistant" | "system"
+  content        String       @db.Text
+
+  // Cost tracking
+  inputTokens  Int?
+  outputTokens Int?
+  cachedTokens Int?
+  modelUsed    String? // "sonnet-4.5"
+
+  createdAt DateTime @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+model Resource {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  type        String // "hotline" | "service" | "hospital" | "psychologist"
+  description String   @db.Text
+  phone       String?
+  website     String?
+  address     String?
+  region      String   @default("Victoria") // "Victoria" | "National"
+  tags        String[]
+  priority    Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([type, active, priority])
+  @@index([region, active])
+}
+
+model CrisisFlag {
+  id             String  @id @default(cuid())
+  userId         String
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversationId String?
+
+  severity       String // "high" | "medium" | "low"
+  indicators     String[]
+  messageSnippet String   @db.Text
+
+  handled   Boolean   @default(false)
+  handledBy String?
+  handledAt DateTime?
+  notes     String?   @db.Text
+
+  createdAt DateTime @default(now())
+
+  @@index([createdAt, handled])
+  @@index([userId, createdAt])
+  @@index([severity, handled])
+}
+
+model UsageLog {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  date DateTime @default(now()) @db.Date
+
+  // Token usage
+  inputTokens  Int @default(0)
+  outputTokens Int @default(0)
+  cachedTokens Int @default(0)
+
+  // Cost calculation (in cents)
+  estimatedCost Int @default(0)
+
+  // Message counts
+  messageCount Int @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, date])
+  @@index([date])
+  @@index([userId, date])
+}
+
+model CachedPrompt {
+  id      String  @id @default(cuid())
+  key     String  @unique
+  content String  @db.Text
+  version Int     @default(1)
+  active  Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([key, active])
+}
