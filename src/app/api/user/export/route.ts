@@ -49,7 +49,7 @@ export async function GET() {
     return new NextResponse(JSON.stringify(exportData, null, 2), {
       headers: {
         "Content-Type": "application/json",
-        "Content-Disposition": `attachment; filename="mindsupport-export-${new Date().toISOString().split("T")[0]}.json"`,
+        "Content-Disposition": `attachment; filename="fred-export-${new Date().toISOString().split("T")[0]}.json"`,
       },
     });
   } catch (error) {

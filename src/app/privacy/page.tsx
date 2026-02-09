@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Footer } from "@/components/layout/footer";
 
 export const metadata = {
-  title: "Privacy Policy - MindSupport Victoria",
-  description: "Privacy policy for the MindSupport Victoria platform",
+  title: "Privacy Policy - FRED",
+  description: "Privacy policy for FRED - Mental Health Support Victoria",
 };
 
 export default function PrivacyPage() {
@@ -23,7 +23,7 @@ export default function PrivacyPage() {
               1. Overview
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              MindSupport Victoria is committed to protecting your privacy. This
+              FRED (Mental Health Support Victoria) is committed to protecting your privacy. This
               policy explains what data we collect, how we store it, how long we
               keep it, and your rights regarding your data.
             </p>
@@ -198,7 +198,7 @@ export default function PrivacyPage() {
               10. Contact
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              For privacy-related inquiries, please contact the MindSupport
+              For privacy-related inquiries, please contact the FRED
               Victoria team via the platform.
             </p>
           </section>

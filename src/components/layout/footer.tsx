@@ -52,7 +52,7 @@ export function Footer() {
             </Link>
           </div>
           <p className="text-xs text-muted-foreground text-center">
-            &copy; {new Date().getFullYear()} MindSupport Victoria. Not a
+            &copy; {new Date().getFullYear()} FRED - Mental Health Support Victoria. Not a
             substitute for professional medical advice.
           </p>
         </div>

@@ -6,7 +6,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "MindSupport Victoria",
+  title: "FRED - Mental Health Support Victoria",
   description:
     "Free, confidential AI-powered mental health support for Victorian adults.",
   keywords: [

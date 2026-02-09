@@ -1,4 +1,4 @@
-# MindSupport Victoria
+# FRED - Mental Health Support Victoria
 
 Free, confidential AI-powered mental health support for Victorian adults (18+).
 

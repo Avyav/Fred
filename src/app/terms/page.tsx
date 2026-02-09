@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Footer } from "@/components/layout/footer";
 
 export const metadata = {
-  title: "Terms of Service - MindSupport Victoria",
-  description: "Terms of service for the MindSupport Victoria platform",
+  title: "Terms of Service - FRED",
+  description: "Terms of service for FRED - Mental Health Support Victoria",
 };
 
 export default function TermsPage() {
@@ -23,7 +23,7 @@ export default function TermsPage() {
               1. About This Service
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              MindSupport Victoria is a free, AI-powered mental health support
+              FRED is a free, AI-powered mental health support
               tool designed for adults (18+) living in Victoria, Australia. This
               service provides general emotional support, coping strategies, and
               connections to professional resources. It is{" "}

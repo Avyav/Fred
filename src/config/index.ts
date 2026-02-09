@@ -1,4 +1,4 @@
-export const APP_NAME = "MindSupport Victoria";
+export const APP_NAME = "FRED - Mental Health Support Victoria";
 export const APP_DESCRIPTION =
   "Free, confidential AI-powered mental health support for Victorian adults.";
 

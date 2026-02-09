@@ -1,7 +1,7 @@
 import { ResourceList } from "@/components/resources/resource-list";
 
 export const metadata = {
-  title: "Resources - MindSupport Victoria",
+  title: "Resources - FRED",
   description: "Victorian mental health support services and resources",
 };
 
