@@ -27,6 +27,7 @@ export function ChatInterface() {
 
   const [inputValue, setInputValue] = useState("");
   const [disclaimerDismissed, setDisclaimerDismissed] = useState(false);
+  const [srAnnouncement, setSrAnnouncement] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -77,6 +78,7 @@ export function ChatInterface() {
       if (res.status === 429) {
         const data = await res.json();
         setError(data.error);
+        setSrAnnouncement("Rate limit reached. Please try again later.");
         return;
       }
 
@@ -107,9 +109,15 @@ export function ChatInterface() {
         createdAt: new Date().toISOString(),
       });
 
+      // Screen reader announcement
+      setSrAnnouncement("New response received from MindSupport.");
+
       // Handle crisis flag
       if (data.isCrisis) {
         setIsCrisis(true);
+        setSrAnnouncement(
+          "Crisis support resources are now displayed. If you are in danger, please call triple zero."
+        );
       }
     } catch (err) {
       setError(
@@ -131,7 +139,12 @@ export function ChatInterface() {
   ]);
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full" role="region" aria-label="Chat conversation">
+      {/* Screen reader live region */}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {srAnnouncement}
+      </div>
+
       {/* Disclaimer banner */}
       {!disclaimerDismissed && (
         <div className="flex items-center justify-between bg-muted/50 border-b border-border px-4 py-2">
@@ -149,6 +162,7 @@ export function ChatInterface() {
           <button
             onClick={() => setDisclaimerDismissed(true)}
             className="text-xs text-muted-foreground hover:text-foreground ml-4 shrink-0"
+            aria-label="Dismiss disclaimer"
           >
             Dismiss
           </button>
@@ -191,7 +205,7 @@ export function ChatInterface() {
 
           {/* Loading indicator */}
           {isLoading && (
-            <div className="flex gap-3 px-4 py-3">
+            <div className="flex gap-3 px-4 py-3" role="status" aria-label="Generating response">
               <div className="h-8 w-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
                 <div className="flex gap-1">
                   <span className="h-1.5 w-1.5 rounded-full bg-accent animate-bounce [animation-delay:-0.3s]" />

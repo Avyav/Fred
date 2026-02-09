@@ -2,7 +2,15 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Phone, LogOut, User, MessageCircle, ShieldAlert } from "lucide-react";
+import {
+  Phone,
+  LogOut,
+  User,
+  MessageCircle,
+  ShieldAlert,
+  Settings,
+  DollarSign,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -25,10 +33,19 @@ export function Header() {
   return (
     <header className="border-b border-border bg-background">
       {/* Crisis banner */}
-      <div className="bg-destructive text-destructive-foreground px-4 py-1.5 text-center text-xs">
-        <Phone className="inline-block h-3 w-3 mr-1" />
-        Emergency: <a href="tel:000" className="underline font-bold">000</a>
-        {" | "}Lifeline: <a href="tel:131114" className="underline font-bold">13 11 14</a>
+      <div
+        role="banner"
+        className="bg-destructive text-destructive-foreground px-4 py-1.5 text-center text-xs"
+      >
+        <Phone className="inline-block h-3 w-3 mr-1" aria-hidden="true" />
+        Emergency:{" "}
+        <a href="tel:000" className="underline font-bold" aria-label="Call emergency services triple zero">
+          000
+        </a>
+        {" | "}Lifeline:{" "}
+        <a href="tel:131114" className="underline font-bold" aria-label="Call Lifeline 13 11 14">
+          13 11 14
+        </a>
       </div>
 
       {/* Navigation */}
@@ -79,13 +96,28 @@ export function Header() {
                   Profile
                 </Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/settings" className="cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
               {isAdmin && (
-                <DropdownMenuItem asChild>
-                  <Link href="/admin/crisis-flags" className="cursor-pointer">
-                    <ShieldAlert className="mr-2 h-4 w-4" />
-                    Crisis Dashboard
-                  </Link>
-                </DropdownMenuItem>
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin/crisis-flags" className="cursor-pointer">
+                      <ShieldAlert className="mr-2 h-4 w-4" />
+                      Crisis Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin/costs" className="cursor-pointer">
+                      <DollarSign className="mr-2 h-4 w-4" />
+                      Cost Monitoring
+                    </Link>
+                  </DropdownMenuItem>
+                </>
               )}
               <DropdownMenuSeparator />
               <DropdownMenuItem
