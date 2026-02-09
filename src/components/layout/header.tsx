@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Phone, LogOut, User, MessageCircle } from "lucide-react";
+import { Phone, LogOut, User, MessageCircle, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -19,6 +19,8 @@ export function Header() {
   const initials = session?.user?.email
     ? session.user.email.substring(0, 2).toUpperCase()
     : "?";
+
+  const isAdmin = session?.user?.email?.endsWith("@admin.mindsupport.vic.gov.au");
 
   return (
     <header className="border-b border-border bg-background">
@@ -77,6 +79,14 @@ export function Header() {
                   Profile
                 </Link>
               </DropdownMenuItem>
+              {isAdmin && (
+                <DropdownMenuItem asChild>
+                  <Link href="/admin/crisis-flags" className="cursor-pointer">
+                    <ShieldAlert className="mr-2 h-4 w-4" />
+                    Crisis Dashboard
+                  </Link>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer text-destructive focus:text-destructive"

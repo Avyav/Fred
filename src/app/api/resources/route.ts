@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
     const type = searchParams.get("type");
     const region = searchParams.get("region");
     const tag = searchParams.get("tag");
+    const search = searchParams.get("search");
 
     const resources = await prisma.resource.findMany({
       where: {
@@ -20,6 +21,14 @@ export async function GET(req: NextRequest) {
         ...(type ? { type } : {}),
         ...(region ? { region } : {}),
         ...(tag ? { tags: { has: tag } } : {}),
+        ...(search
+          ? {
+              OR: [
+                { name: { contains: search, mode: "insensitive" } },
+                { description: { contains: search, mode: "insensitive" } },
+              ],
+            }
+          : {}),
       },
       orderBy: { priority: "desc" },
     });

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Phone } from "lucide-react";
 import { SignInForm } from "@/components/auth/signin-form";
 
@@ -17,7 +18,9 @@ export default function SignInPage() {
       </div>
 
       <main className="flex-1 flex items-center justify-center px-4 py-8">
-        <SignInForm />
+        <Suspense>
+          <SignInForm />
+        </Suspense>
       </main>
     </div>
   );

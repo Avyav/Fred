@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ChatMessage } from "./chat-message";
 import { ChatInput } from "./chat-input";
 import { CrisisBanner } from "./crisis-banner";
+import { ResourceSuggestions } from "./resource-suggestions";
 import { useAppStore } from "@/store";
 
 export function ChatInterface() {
@@ -21,7 +22,6 @@ export function ChatInterface() {
     setIsCrisis,
     setError,
     setCurrentConversation,
-    setMessages,
     addConversation,
   } = useAppStore();
 
@@ -127,7 +127,6 @@ export function ChatInterface() {
     setError,
     setIsCrisis,
     setCurrentConversation,
-    setMessages,
     addConversation,
   ]);
 
@@ -230,7 +229,12 @@ export function ChatInterface() {
         </div>
       </ScrollArea>
 
-      {/* Chat input */}
+      {/* Resource suggestions + Chat input */}
+      {currentConversationId && messages.length > 0 && (
+        <div className="flex items-center px-4 pt-2">
+          <ResourceSuggestions conversationId={currentConversationId} />
+        </div>
+      )}
       <ChatInput
         value={inputValue}
         onChange={setInputValue}
