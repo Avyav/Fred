@@ -31,7 +31,7 @@ export function Header() {
   const isAdmin = session?.user?.email?.endsWith("@admin.mindsupport.vic.gov.au");
 
   return (
-    <header className="border-b border-border bg-background">
+    <header className="border-b border-purple-100/60 backdrop-blur-md bg-background/80">
       {/* Crisis banner */}
       <div
         role="banner"
@@ -53,7 +53,7 @@ export function Header() {
         <Link href="/chat" className="flex items-center space-x-2">
           <MessageCircle className="h-5 w-5 text-primary" />
           <span className="font-semibold text-foreground">
-            MindSupport Victoria
+            FRED
           </span>
         </Link>
 

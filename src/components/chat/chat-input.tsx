@@ -56,7 +56,7 @@ export function ChatInput({
   const isOverLimit = charCount > MAX_MESSAGE_LENGTH;
 
   return (
-    <div className="border-t border-border bg-background px-4 py-3">
+    <div className="border-t border-purple-100 backdrop-blur-xl bg-background/80 px-4 py-3">
       {rateLimited && rateLimitMessage && (
         <div className="mb-2 rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
           {rateLimitMessage}
@@ -77,11 +77,11 @@ export function ChatInput({
             }
             disabled={rateLimited}
             rows={1}
-            className="w-full resize-none rounded-lg border border-input bg-background px-4 py-3 pr-12 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+            className="w-full resize-none rounded-xl border border-purple-200/60 bg-white/60 px-4 py-3 pr-12 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
           />
           <Button
             size="sm"
-            className="absolute right-2 bottom-2 h-7 w-7 p-0"
+            className="absolute right-2 bottom-2 h-7 w-7 p-0 bg-gradient-to-br from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 shadow-sm"
             onClick={onSend}
             disabled={!canSend || isOverLimit}
           >

@@ -51,10 +51,10 @@ export function ChatMessage({ role, content, createdAt }: ChatMessageProps) {
 
       <div
         className={cn(
-          "relative max-w-[80%] rounded-xl px-4 py-2.5",
+          "relative max-w-[80%] rounded-2xl px-4 py-3",
           isUser
-            ? "bg-primary text-primary-foreground"
-            : "bg-muted text-foreground"
+            ? "bg-gradient-to-br from-primary to-purple-600 text-primary-foreground shadow-md shadow-purple-500/10"
+            : "bg-white text-foreground shadow-sm border border-purple-50"
         )}
       >
         {isUser ? (

@@ -15,7 +15,7 @@ export default function ChatPage() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "border-r border-border bg-muted/30 transition-all duration-200 flex-shrink-0",
+          "border-r border-purple-100 bg-purple-50/50 transition-all duration-200 flex-shrink-0",
           isSidebarOpen ? "w-72" : "w-0 overflow-hidden",
           // Mobile: overlay
           "max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:z-40 max-md:top-[theme(spacing.24)]",

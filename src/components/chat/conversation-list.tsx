@@ -141,7 +141,7 @@ export function ConversationList() {
     <div className="flex flex-col h-full">
       <div className="p-3 border-b border-border">
         <Button
-          className="w-full"
+          className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 shadow-sm"
           size="sm"
           onClick={handleNewConversation}
           disabled={isCreating}
@@ -183,8 +183,8 @@ export function ConversationList() {
                 className={cn(
                   "group flex items-center gap-2 rounded-md px-3 py-2.5 cursor-pointer transition-colors",
                   currentConversationId === convo.id
-                    ? "bg-primary/10 text-foreground"
-                    : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                    ? "bg-purple-100/60 text-foreground"
+                    : "hover:bg-purple-50/60 text-muted-foreground hover:text-foreground"
                 )}
                 onClick={() => handleSelectConversation(convo.id)}
               >

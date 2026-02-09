@@ -110,7 +110,7 @@ export function ChatInterface() {
       });
 
       // Screen reader announcement
-      setSrAnnouncement("New response received from MindSupport.");
+      setSrAnnouncement("New response received from FRED.");
 
       // Handle crisis flag
       if (data.isCrisis) {
@@ -177,16 +177,19 @@ export function ChatInterface() {
         <div className="max-w-3xl mx-auto py-4 space-y-6">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 px-4">
-              <MessageCircle className="h-12 w-12 text-muted-foreground/40 mb-4" />
+              <div className="relative mb-6">
+                <div className="absolute inset-0 rounded-full bg-purple-100/60 scale-150" />
+                <MessageCircle className="relative h-14 w-14 text-primary/50 animate-float" />
+              </div>
               <h2 className="text-lg font-semibold text-foreground mb-2">
-                Welcome to MindSupport Victoria
+                Welcome to FRED
               </h2>
               <p className="text-sm text-muted-foreground text-center max-w-md leading-relaxed">
                 I&apos;m here to listen and support you. You can talk about
                 what you&apos;re feeling, ask about coping strategies, or find
                 local mental health resources.
               </p>
-              <p className="text-xs text-muted-foreground text-center mt-4 max-w-md">
+              <p className="text-xs text-muted-foreground/70 text-center mt-4 max-w-md">
                 Remember: I&apos;m an AI support tool, not a therapist. For
                 professional help, consider asking your GP about a Mental Health
                 Care Plan.
@@ -208,9 +211,9 @@ export function ChatInterface() {
             <div className="flex gap-3 px-4 py-3" role="status" aria-label="Generating response">
               <div className="h-8 w-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
                 <div className="flex gap-1">
-                  <span className="h-1.5 w-1.5 rounded-full bg-accent animate-bounce [animation-delay:-0.3s]" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-accent animate-bounce [animation-delay:-0.15s]" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-accent animate-bounce" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-pulse [animation-delay:-0.3s]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-pulse [animation-delay:-0.15s]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-pulse" />
                 </div>
               </div>
               <div className="rounded-xl bg-muted px-4 py-2.5">

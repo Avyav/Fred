@@ -3,7 +3,7 @@ import { Phone } from "lucide-react";
 import { SignInForm } from "@/components/auth/signin-form";
 
 export const metadata = {
-  title: "Sign In - MindSupport Victoria",
+  title: "Sign In - FRED",
   description: "Sign in to your mental health support account",
 };
 
@@ -17,10 +17,14 @@ export default function SignInPage() {
         {" | "}Lifeline: <a href="tel:131114" className="underline font-bold">13 11 14</a>
       </div>
 
-      <main className="flex-1 flex items-center justify-center px-4 py-8">
-        <Suspense>
-          <SignInForm />
-        </Suspense>
+      <main className="flex-1 flex items-center justify-center px-4 py-8 gradient-lilac">
+        <div className="w-full max-w-md">
+          <div className="rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg shadow-purple-500/5 border border-purple-100 p-1">
+            <Suspense>
+              <SignInForm />
+            </Suspense>
+          </div>
+        </div>
       </main>
     </div>
   );
