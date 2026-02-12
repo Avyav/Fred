@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Phone, Shield, MapPin, Clock } from "lucide-react";
 
 export default function HomePage() {
@@ -20,9 +21,16 @@ export default function HomePage() {
       {/* Hero Section */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-20 gradient-lilac-hero">
         <div className="max-w-3xl mx-auto text-center space-y-8">
-          <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-foreground opacity-0 animate-fade-in-up">
-            FRED
-          </h1>
+          <div className="opacity-0 animate-fade-in-up">
+            <Image
+              src="/images/Logo2.jpeg"
+              alt="FRED"
+              width={280}
+              height={80}
+              className="mx-auto"
+              priority
+            />
+          </div>
           <p className="text-lg text-muted-foreground -mt-4 opacity-0 animate-fade-in-up-delay-1">
             Mental Health Support Victoria
           </p>
@@ -138,8 +146,16 @@ export default function HomePage() {
               </a>
             </div>
           </div>
-          <p className="text-xs text-muted-foreground text-center mt-6">
-            &copy; {new Date().getFullYear()} FRED - Mental Health Support Victoria. For
+          <p className="text-xs text-muted-foreground text-center mt-6 flex items-center justify-center gap-1.5">
+            &copy; {new Date().getFullYear()}
+            <Image
+              src="/images/Logo1.png"
+              alt=""
+              width={16}
+              height={16}
+              className="inline-block"
+            />
+            FRED - Mental Health Support Victoria. For
             Victorian adults aged 18+.
           </p>
         </div>

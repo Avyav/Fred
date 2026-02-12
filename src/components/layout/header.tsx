@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
 import {
   Phone,
   LogOut,
   User,
-  MessageCircle,
   ShieldAlert,
   Settings,
   DollarSign,
@@ -51,7 +51,12 @@ export function Header() {
       {/* Navigation */}
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
         <Link href="/chat" className="flex items-center space-x-2">
-          <MessageCircle className="h-5 w-5 text-primary" />
+          <Image
+            src="/images/Logo1.png"
+            alt=""
+            width={24}
+            height={24}
+          />
           <span className="font-semibold text-foreground">
             FRED
           </span>

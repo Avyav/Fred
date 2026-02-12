@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     "Australia",
     "wellbeing",
   ],
+  icons: {
+    icon: "/images/Logo1.png",
+  },
 };
 
 export const viewport: Viewport = {
