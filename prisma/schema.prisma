@@ -136,6 +136,17 @@ model UsageLog {
   @@index([userId, date])
 }
 
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([token])
+}
+
 model CachedPrompt {
   id      String  @id @default(cuid())
   key     String  @unique
