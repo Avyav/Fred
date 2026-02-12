@@ -188,39 +188,19 @@ export async function POST(req: NextRequest) {
       isCrisis: crisisCheck.isCrisis,
     });
   } catch (error: unknown) {
-    console.error("[Chat API] Error:", error);
+    // Build a descriptive error message for debugging
+    const errMsg = error instanceof Error ? error.message : String(error);
+    const errName = error instanceof Error ? error.name : "Unknown";
+    const errStatus = error && typeof error === "object" && "status" in error
+      ? (error as { status: number }).status
+      : null;
 
-    // Surface Anthropic API errors (credits, rate limits, auth)
-    if (
-      error &&
-      typeof error === "object" &&
-      "status" in error &&
-      typeof (error as { status: unknown }).status === "number"
-    ) {
-      const apiError = error as { status: number; message?: string };
-      if (apiError.status === 429) {
-        return NextResponse.json(
-          { error: "AI service rate limit or credit limit reached. Please check your Anthropic billing." },
-          { status: 503 }
-        );
-      }
-      if (apiError.status === 401) {
-        return NextResponse.json(
-          { error: "AI service authentication failed. Please check the API key configuration." },
-          { status: 503 }
-        );
-      }
-      if (apiError.status === 400) {
-        return NextResponse.json(
-          { error: `AI service error: ${apiError.message || "Bad request"}` },
-          { status: 503 }
-        );
-      }
-    }
+    console.error(`[Chat API] ${errName}: ${errMsg} (status: ${errStatus})`);
 
+    // Surface the actual error to the client for debugging
     return NextResponse.json(
-      { error: "An error occurred processing your message. Please try again." },
-      { status: 500 }
+      { error: `AI service error: ${errMsg}` },
+      { status: errStatus === 429 ? 503 : errStatus === 401 ? 503 : 500 }
     );
   }
 }
