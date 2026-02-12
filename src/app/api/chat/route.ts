@@ -187,8 +187,37 @@ export async function POST(req: NextRequest) {
       },
       isCrisis: crisisCheck.isCrisis,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("[Chat API] Error:", error);
+
+    // Surface Anthropic API errors (credits, rate limits, auth)
+    if (
+      error &&
+      typeof error === "object" &&
+      "status" in error &&
+      typeof (error as { status: unknown }).status === "number"
+    ) {
+      const apiError = error as { status: number; message?: string };
+      if (apiError.status === 429) {
+        return NextResponse.json(
+          { error: "AI service rate limit or credit limit reached. Please check your Anthropic billing." },
+          { status: 503 }
+        );
+      }
+      if (apiError.status === 401) {
+        return NextResponse.json(
+          { error: "AI service authentication failed. Please check the API key configuration." },
+          { status: 503 }
+        );
+      }
+      if (apiError.status === 400) {
+        return NextResponse.json(
+          { error: `AI service error: ${apiError.message || "Bad request"}` },
+          { status: 503 }
+        );
+      }
+    }
+
     return NextResponse.json(
       { error: "An error occurred processing your message. Please try again." },
       { status: 500 }
