@@ -1,9 +1,13 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { SYSTEM_PROMPT_V1 } from "./system-prompts";
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+function getClient() {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error("ANTHROPIC_API_KEY is not set");
+  }
+  return new Anthropic({ apiKey, timeout: 30_000 });
+}
 
 // The Anthropic API supports cache_control on system blocks at runtime,
 // but the SDK types in v0.30 don't fully expose it. Use type assertion.
@@ -27,6 +31,8 @@ export async function createCachedMessage(
     text: SYSTEM_PROMPT_V1,
     cache_control: { type: "ephemeral" },
   };
+
+  const anthropic = getClient();
 
   const response = await anthropic.messages.create({
     model: "claude-sonnet-4-5-20250929",
