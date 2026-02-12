@@ -86,11 +86,6 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // Increment weekly conversation count
-      await prisma.user.update({
-        where: { id: session.user.id },
-        data: { weeklyConvoCount: { increment: 1 } },
-      });
     }
 
     // 6. Save user message

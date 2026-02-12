@@ -28,7 +28,6 @@ interface UserProfile {
   location: string;
   createdAt: string;
   dailyMessageCount: number;
-  weeklyConvoCount: number;
 }
 
 export default function ProfilePage() {
@@ -139,29 +138,15 @@ export default function ProfilePage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">Messages today</p>
-              <p className="text-2xl font-bold">
-                {profile?.dailyMessageCount ?? 0}
-                <span className="text-sm font-normal text-muted-foreground">
-                  {" "}
-                  / 20
-                </span>
-              </p>
-            </div>
-            <div className="space-y-1">
-              <p className="text-sm text-muted-foreground">
-                Conversations this week
-              </p>
-              <p className="text-2xl font-bold">
-                {profile?.weeklyConvoCount ?? 0}
-                <span className="text-sm font-normal text-muted-foreground">
-                  {" "}
-                  / 5
-                </span>
-              </p>
-            </div>
+          <div className="space-y-1">
+            <p className="text-sm text-muted-foreground">Messages today</p>
+            <p className="text-2xl font-bold">
+              {profile?.dailyMessageCount ?? 0}
+              <span className="text-sm font-normal text-muted-foreground">
+                {" "}
+                / 20
+              </span>
+            </p>
           </div>
         </CardContent>
       </Card>

@@ -18,10 +18,6 @@ export const LIMITS = {
     process.env.DAILY_MESSAGE_LIMIT || "20",
     10
   ),
-  WEEKLY_CONVERSATION_LIMIT: parseInt(
-    process.env.WEEKLY_CONVERSATION_LIMIT || "5",
-    10
-  ),
   MAX_MESSAGE_LENGTH: 2000,
   MAX_CONTEXT_MESSAGES: 10,
   SUMMARIZATION_THRESHOLD: 20,

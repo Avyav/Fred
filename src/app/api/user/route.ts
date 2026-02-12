@@ -20,8 +20,6 @@ export async function GET() {
         createdAt: true,
         dailyMessageCount: true,
         dailyMessageResetAt: true,
-        weeklyConvoCount: true,
-        weeklyConvoResetAt: true,
       },
     });
 

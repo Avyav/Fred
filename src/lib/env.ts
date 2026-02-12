@@ -12,7 +12,6 @@ const requiredVars = [
 const optionalVars = [
   "NEXTAUTH_URL",
   "DAILY_MESSAGE_LIMIT",
-  "WEEKLY_CONVERSATION_LIMIT",
   "DAILY_COST_THRESHOLD_CENTS",
   "MONTHLY_COST_THRESHOLD_CENTS",
 ] as const;

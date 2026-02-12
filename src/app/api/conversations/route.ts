@@ -40,43 +40,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Check weekly conversation limit
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-    });
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    const now = new Date();
-    const daysSinceWeeklyReset = Math.floor(
-      (now.getTime() - user.weeklyConvoResetAt.getTime()) /
-        (1000 * 60 * 60 * 24)
-    );
-
-    const weeklyLimit = parseInt(
-      process.env.WEEKLY_CONVERSATION_LIMIT || "5",
-      10
-    );
-
-    if (daysSinceWeeklyReset >= 7) {
-      await prisma.user.update({
-        where: { id: session.user.id },
-        data: { weeklyConvoCount: 0, weeklyConvoResetAt: now },
-      });
-    } else if (user.weeklyConvoCount >= weeklyLimit) {
-      const resetAt = new Date(user.weeklyConvoResetAt);
-      resetAt.setDate(resetAt.getDate() + 7);
-      return NextResponse.json(
-        {
-          error: `Weekly conversation limit (${weeklyLimit}) reached`,
-          resetAt,
-        },
-        { status: 429 }
-      );
-    }
-
     const body = await req.json().catch(() => ({}));
 
     const conversation = await prisma.conversation.create({
@@ -84,12 +47,6 @@ export async function POST(req: NextRequest) {
         userId: session.user.id,
         title: body.title || null,
       },
-    });
-
-    // Increment weekly count
-    await prisma.user.update({
-      where: { id: session.user.id },
-      data: { weeklyConvoCount: { increment: 1 } },
     });
 
     return NextResponse.json(conversation, { status: 201 });
