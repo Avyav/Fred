@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { Phone } from "lucide-react";
 import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
+import { FredIconLarge } from "@/components/ui/fred-icon-wrapper";
 
 export const metadata = {
   title: "Forgot Password - FRED",
@@ -19,14 +19,7 @@ export default function ForgotPasswordPage() {
 
       <main className="flex-1 flex items-center justify-center px-4 py-8 gradient-lilac">
         <div className="w-full max-w-md">
-          <div className="flex justify-center mb-6">
-            <Image
-              src="/images/Logo1.png"
-              alt="FRED"
-              width={48}
-              height={48}
-            />
-          </div>
+          <FredIconLarge />
           <div className="rounded-2xl bg-white/80 backdrop-blur-sm shadow-lg shadow-purple-500/5 border border-purple-100 p-1">
             <ForgotPasswordForm />
           </div>

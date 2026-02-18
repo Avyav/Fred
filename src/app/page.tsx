@@ -21,13 +21,13 @@ export default function HomePage() {
       {/* Hero Section */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 py-20 gradient-lilac-hero">
         <div className="max-w-3xl mx-auto text-center space-y-8">
-          <div className="opacity-0 animate-fade-in-up">
+          <div className="opacity-0 animate-fade-in-up flex flex-col items-center gap-4">
             <Image
-              src="/images/Logo2.jpeg"
+              src="/images/FRED.svg"
               alt="FRED"
-              width={280}
-              height={80}
-              className="mx-auto"
+              width={320}
+              height={110}
+              className="mx-auto rounded-2xl"
               priority
             />
           </div>

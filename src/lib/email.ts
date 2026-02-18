@@ -14,7 +14,7 @@ export async function sendPasswordResetEmail(email: string, token: string) {
     html: `
       <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 24px;">
         <div style="text-align: center; margin-bottom: 24px;">
-          <img src="${process.env.NEXT_PUBLIC_APP_URL}/images/Logo2.jpeg" alt="FRED" style="max-width: 200px; height: auto;" />
+          <img src="${process.env.NEXT_PUBLIC_APP_URL}/images/FRED.svg" alt="FRED" style="max-width: 200px; height: auto;" />
         </div>
         <h2 style="color: #1a1a1a; margin-bottom: 16px;">Reset your password</h2>
         <p style="color: #4a4a4a; line-height: 1.6;">

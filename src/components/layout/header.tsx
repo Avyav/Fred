@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useSession, signOut } from "next-auth/react";
+import { FredMorphIcon } from "@/components/ui/fred-morph-icon";
 import {
   Phone,
   LogOut,
@@ -51,12 +51,7 @@ export function Header() {
       {/* Navigation */}
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
         <Link href="/chat" className="flex items-center space-x-2">
-          <Image
-            src="/images/Logo1.png"
-            alt=""
-            width={24}
-            height={24}
-          />
+          <FredMorphIcon size={28} />
           <span className="font-semibold text-foreground">
             FRED
           </span>

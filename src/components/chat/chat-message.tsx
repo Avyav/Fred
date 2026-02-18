@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { User, Bot, Copy, Check } from "lucide-react";
+import { User, Copy, Check } from "lucide-react";
+import { FredMorphIcon } from "@/components/ui/fred-morph-icon";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { cn } from "@/lib/utils";
@@ -36,18 +37,15 @@ export function ChatMessage({ role, content, createdAt }: ChatMessageProps) {
         isUser ? "flex-row-reverse" : "flex-row"
       )}
     >
-      <Avatar className="h-8 w-8 shrink-0">
-        <AvatarFallback
-          className={cn(
-            "text-xs",
-            isUser
-              ? "bg-primary/10 text-primary"
-              : "bg-accent/10 text-accent"
-          )}
-        >
-          {isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
-        </AvatarFallback>
-      </Avatar>
+      {isUser ? (
+        <Avatar className="h-8 w-8 shrink-0">
+          <AvatarFallback className="text-xs bg-primary/10 text-primary">
+            <User className="h-4 w-4" />
+          </AvatarFallback>
+        </Avatar>
+      ) : (
+        <FredMorphIcon size={32} className="shrink-0" />
+      )}
 
       <div
         className={cn(
