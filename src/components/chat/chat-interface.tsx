@@ -9,6 +9,7 @@ import { ChatMessage } from "./chat-message";
 import { ChatInput } from "./chat-input";
 import { CrisisBanner } from "./crisis-banner";
 import { ResourceSuggestions } from "./resource-suggestions";
+import { HandoffButton } from "./handoff-button";
 import { useAppStore } from "@/store";
 
 export function ChatInterface() {
@@ -172,6 +173,13 @@ export function ChatInterface() {
 
       {/* Crisis banner */}
       {isCrisis && <CrisisBanner forcedOpen />}
+
+      {/* Handoff button */}
+      {currentConversationId && messages.length > 0 && (
+        <div className="flex items-center px-4 py-1.5 border-b border-border/50">
+          <HandoffButton conversationId={currentConversationId} />
+        </div>
+      )}
 
       {/* Messages area */}
       <ScrollArea className="flex-1" ref={scrollRef}>

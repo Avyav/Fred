@@ -64,7 +64,7 @@ export function SignUpForm() {
         // Account created but auto-login failed, redirect to signin
         router.push("/signin?registered=true");
       } else {
-        router.push("/chat");
+        router.push("/onboarding");
       }
     } catch {
       setError("An unexpected error occurred. Please try again.");

@@ -22,13 +22,14 @@ export async function createCachedMessage(
   options: {
     maxTokens?: number;
     temperature?: number;
+    readingLevelClause?: string;
   } = {}
 ) {
-  const { maxTokens = 300, temperature = 0.7 } = options;
+  const { maxTokens = 300, temperature = 0.7, readingLevelClause = "" } = options;
 
   const systemBlock: CachedTextBlock = {
     type: "text",
-    text: SYSTEM_PROMPT_V1,
+    text: SYSTEM_PROMPT_V1 + readingLevelClause,
     cache_control: { type: "ephemeral" },
   };
 

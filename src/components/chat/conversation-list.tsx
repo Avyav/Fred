@@ -16,6 +16,49 @@ import { cn } from "@/lib/utils";
 import { useAppStore, type Conversation } from "@/store";
 import { animate, stagger } from "animejs";
 
+interface DateGroup {
+  label: string;
+  items: Conversation[];
+}
+
+function groupByDate(conversations: Conversation[]): DateGroup[] {
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const startOfYesterday = new Date(startOfToday);
+  startOfYesterday.setDate(startOfYesterday.getDate() - 1);
+  const startOfWeek = new Date(startOfToday);
+  startOfWeek.setDate(startOfWeek.getDate() - startOfToday.getDay());
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const groups: Record<string, Conversation[]> = {
+    Today: [],
+    Yesterday: [],
+    "This Week": [],
+    "This Month": [],
+    Older: [],
+  };
+
+  for (const convo of conversations) {
+    const d = new Date(convo.updatedAt);
+    if (d >= startOfToday) {
+      groups["Today"].push(convo);
+    } else if (d >= startOfYesterday) {
+      groups["Yesterday"].push(convo);
+    } else if (d >= startOfWeek) {
+      groups["This Week"].push(convo);
+    } else if (d >= startOfMonth) {
+      groups["This Month"].push(convo);
+    } else {
+      groups["Older"].push(convo);
+    }
+  }
+
+  const order = ["Today", "Yesterday", "This Week", "This Month", "Older"];
+  return order
+    .filter((label) => groups[label].length > 0)
+    .map((label) => ({ label, items: groups[label] }));
+}
+
 export function ConversationList() {
   const {
     conversations,
@@ -200,37 +243,44 @@ export function ConversationList() {
           </div>
         ) : (
           <div ref={listRef} className="p-2 space-y-1">
-            {conversations.map((convo) => (
-              <div
-                key={convo.id}
-                data-convo
-                className={cn(
-                  "group flex items-center gap-2 rounded-md px-2.5 py-2 cursor-pointer transition-colors",
-                  currentConversationId === convo.id
-                    ? "border-l-2 border-primary bg-purple-50/40 text-foreground"
-                    : "border-l-2 border-transparent hover:bg-purple-50/60 text-muted-foreground hover:text-foreground"
-                )}
-                onClick={() => handleSelectConversation(convo.id)}
-              >
-                <div className="flex-1 min-w-0 flex items-center gap-2">
-                  <p className="text-sm font-medium truncate flex-1">
-                    {convo.title || "New Conversation"}
-                  </p>
-                  <span className="text-[10px] text-muted-foreground shrink-0">
-                    {formatDate(convo.updatedAt)}
-                  </span>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setDeleteTarget(convo);
-                  }}
-                >
-                  <Trash2 className="h-3 w-3 text-muted-foreground hover:text-destructive" />
-                </Button>
+            {groupByDate(conversations).map((group) => (
+              <div key={group.label}>
+                <p className="text-[10px] uppercase text-muted-foreground font-medium tracking-wider px-2.5 pt-3 pb-1">
+                  {group.label}
+                </p>
+                {group.items.map((convo) => (
+                  <div
+                    key={convo.id}
+                    data-convo
+                    className={cn(
+                      "group flex items-center gap-2 rounded-md px-2.5 py-2 cursor-pointer transition-colors",
+                      currentConversationId === convo.id
+                        ? "border-l-2 border-primary bg-purple-50/40 text-foreground"
+                        : "border-l-2 border-transparent hover:bg-purple-50/60 text-muted-foreground hover:text-foreground"
+                    )}
+                    onClick={() => handleSelectConversation(convo.id)}
+                  >
+                    <div className="flex-1 min-w-0 flex items-center gap-2">
+                      <p className="text-sm font-medium truncate flex-1">
+                        {convo.title || "New Conversation"}
+                      </p>
+                      <span className="text-[10px] text-muted-foreground shrink-0">
+                        {formatDate(convo.updatedAt)}
+                      </span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDeleteTarget(convo);
+                      }}
+                    >
+                      <Trash2 className="h-3 w-3 text-muted-foreground hover:text-destructive" />
+                    </Button>
+                  </div>
+                ))}
               </div>
             ))}
           </div>

@@ -108,4 +108,22 @@ User: "Can you give me some tips for managing stress?"
 Assistant: "Sure. One thing that might be worth a try tonight — when you notice the stress building, just pause and take five slow breaths, breathing out for longer than you breathe in. Nothing fancy, just giving your nervous system a chance to settle. See how it goes and we can talk about what else might help from there."`;
 
 
+export function getReadingLevelClause(
+  educationLevel: string | null | undefined,
+  communicationPreference: number | null | undefined
+): string {
+  const pref = communicationPreference ?? 3;
+
+  if (pref <= 2) {
+    return "\n\nREADING LEVEL ADJUSTMENT: Use very simple, short sentences. Avoid any clinical or technical words. Write at a primary school reading level. One idea per sentence.";
+  }
+
+  if (pref >= 4) {
+    return "\n\nREADING LEVEL ADJUSTMENT: You can use more nuanced vocabulary and longer explanations when helpful. The user is comfortable with detailed information about mental health concepts.";
+  }
+
+  // Level 3 (default) — no adjustment needed
+  return "";
+}
+
 export const PROMPT_CACHE_KEY = "system_prompt_v2";

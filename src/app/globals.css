@@ -122,3 +122,25 @@
     min-width: 44px;
   }
 }
+
+/* Print styles for handoff summaries */
+@media print {
+  header, footer, nav, aside,
+  .print\\:hidden {
+    display: none !important;
+  }
+  body {
+    font-size: 12pt;
+    color: black;
+    background: white;
+  }
+  .print\\:m-0 {
+    margin: 0;
+  }
+  .print\\:mb-2 {
+    margin-bottom: 0.5rem;
+  }
+  .print\\:space-y-2 > * + * {
+    margin-top: 0.5rem;
+  }
+}

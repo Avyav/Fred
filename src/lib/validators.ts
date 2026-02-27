@@ -63,7 +63,20 @@ export const resetPasswordSchema = z
     path: ["confirmPassword"],
   });
 
+export const onboardingSchema = z.object({
+  educationLevel: z.enum([
+    "primary",
+    "year10",
+    "year12",
+    "tafe",
+    "university",
+    "postgraduate",
+  ]),
+  communicationPreference: z.coerce.number().int().min(1).max(5),
+});
+
 export type SignUpInput = z.infer<typeof signUpSchema>;
 export type SignInInput = z.infer<typeof signInSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+export type OnboardingInput = z.infer<typeof onboardingSchema>;

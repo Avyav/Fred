@@ -10,6 +10,7 @@ import {
   ShieldAlert,
   Settings,
   DollarSign,
+  Database,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -70,6 +71,12 @@ export function Header() {
           >
             Resources
           </Link>
+          <Link
+            href="/handoff"
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            My Summary
+          </Link>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -115,6 +122,12 @@ export function Header() {
                     <Link href="/admin/costs" className="cursor-pointer">
                       <DollarSign className="mr-2 h-4 w-4" />
                       Cost Monitoring
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/admin/resources" className="cursor-pointer">
+                      <Database className="mr-2 h-4 w-4" />
+                      Resources
                     </Link>
                   </DropdownMenuItem>
                 </>

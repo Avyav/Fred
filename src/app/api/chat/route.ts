@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth/auth";
 import { prisma } from "@/lib/db/prisma";
 import { createCachedMessage, extractUsage } from "@/lib/ai/prompt-cache";
+import { getReadingLevelClause } from "@/lib/ai/system-prompts";
 import { buildOptimizedContext } from "@/lib/ai/context-manager";
 import { detectCrisis, shouldBlockResponse } from "@/lib/ai/safety-check";
 import { checkRateLimits, incrementMessageCount } from "@/lib/utils/rate-limiter";
@@ -100,6 +101,16 @@ export async function POST(req: NextRequest) {
     // 7. Build optimized context
     const conversationHistory = await buildOptimizedContext(conversation.id);
 
+    // 7.5 Fetch user literacy preferences for reading-level adjustment
+    const userPrefs = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { educationLevel: true, communicationPreference: true },
+    });
+    const readingLevelClause = getReadingLevelClause(
+      userPrefs?.educationLevel,
+      userPrefs?.communicationPreference
+    );
+
     // 8. Determine max tokens based on situation
     const maxTokens = crisisCheck.isCrisis ? 500 : 300;
 
@@ -107,6 +118,7 @@ export async function POST(req: NextRequest) {
     const response = await createCachedMessage(conversationHistory, {
       maxTokens,
       temperature: 0.7,
+      readingLevelClause,
     });
 
     // 10. Extract response content
