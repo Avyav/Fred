@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useEffect, useState, useCallback } from "react";
-import { MessageCircle, AlertCircle, RefreshCw } from "lucide-react";
+import { AlertCircle, RefreshCw } from "lucide-react";
+import { FredMorphIcon } from "@/components/ui/fred-morph-icon";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { ChatMessage } from "./chat-message";
@@ -177,9 +178,8 @@ export function ChatInterface() {
         <div className="max-w-3xl mx-auto py-4 space-y-6">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 px-4">
-              <div className="relative mb-6">
-                <div className="absolute inset-0 rounded-full bg-purple-100/60 scale-150" />
-                <MessageCircle className="relative h-14 w-14 text-primary/50 animate-float" />
+              <div className="mb-6">
+                <FredMorphIcon size={56} />
               </div>
               <h2 className="text-lg font-semibold text-foreground mb-2">
                 Welcome to FRED
@@ -208,16 +208,12 @@ export function ChatInterface() {
 
           {/* Loading indicator */}
           {isLoading && (
-            <div className="flex gap-3 px-4 py-3" role="status" aria-label="Generating response">
-              <div className="h-8 w-8 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-                <div className="flex gap-1">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-pulse [animation-delay:-0.3s]" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-pulse [animation-delay:-0.15s]" />
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary/60 animate-pulse" />
-                </div>
+            <div className="flex items-center gap-3 px-4 py-3" role="status" aria-label="FRED is thinking">
+              <div className="shrink-0">
+                <FredMorphIcon size={32} speed="fast" />
               </div>
               <div className="rounded-xl bg-muted px-4 py-2.5">
-                <p className="text-sm text-muted-foreground">Thinking...</p>
+                <p className="text-sm text-muted-foreground">FRED is thinking...</p>
               </div>
             </div>
           )}

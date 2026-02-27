@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Plus, Trash2, MessageCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { useAppStore, type Conversation } from "@/store";
+import { animate, stagger } from "animejs";
 
 export function ConversationList() {
   const {
@@ -32,6 +33,8 @@ export function ConversationList() {
   const [isCreating, setIsCreating] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Conversation | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
+  const hasAnimated = useRef(false);
 
   // Fetch conversations on mount
   useEffect(() => {
@@ -49,6 +52,27 @@ export function ConversationList() {
     }
     fetchConversations();
   }, [setConversations, setError]);
+
+  // Slide-in animation for conversation items on first render
+  useEffect(() => {
+    if (isLoadingList || hasAnimated.current || !listRef.current) return;
+    const items = listRef.current.querySelectorAll<HTMLElement>("[data-convo]");
+    if (items.length === 0) return;
+    hasAnimated.current = true;
+
+    items.forEach((item) => {
+      item.style.opacity = "0";
+      item.style.transform = "translateX(-12px)";
+    });
+
+    animate(items, {
+      opacity: [0, 1],
+      translateX: [-12, 0],
+      duration: 300,
+      ease: "outQuad",
+      delay: stagger(50),
+    });
+  }, [isLoadingList, conversations]);
 
   async function handleNewConversation() {
     setIsCreating(true);
@@ -141,15 +165,14 @@ export function ConversationList() {
     <div className="flex flex-col h-full">
       <div className="p-3 border-b border-border">
         <Button
-          className="w-full bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 shadow-sm"
-          size="sm"
+          className="w-full h-8 text-xs px-3 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90 shadow-sm"
           onClick={handleNewConversation}
           disabled={isCreating}
         >
           {isCreating ? (
-            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
           ) : (
-            <Plus className="h-4 w-4 mr-2" />
+            <Plus className="h-3.5 w-3.5 mr-1.5" />
           )}
           New Conversation
         </Button>
@@ -176,36 +199,37 @@ export function ConversationList() {
             </p>
           </div>
         ) : (
-          <div className="p-2 space-y-1">
+          <div ref={listRef} className="p-2 space-y-1">
             {conversations.map((convo) => (
               <div
                 key={convo.id}
+                data-convo
                 className={cn(
-                  "group flex items-center gap-2 rounded-md px-3 py-2.5 cursor-pointer transition-colors",
+                  "group flex items-center gap-2 rounded-md px-2.5 py-2 cursor-pointer transition-colors",
                   currentConversationId === convo.id
-                    ? "bg-purple-100/60 text-foreground"
-                    : "hover:bg-purple-50/60 text-muted-foreground hover:text-foreground"
+                    ? "border-l-2 border-primary bg-purple-50/40 text-foreground"
+                    : "border-l-2 border-transparent hover:bg-purple-50/60 text-muted-foreground hover:text-foreground"
                 )}
                 onClick={() => handleSelectConversation(convo.id)}
               >
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">
+                <div className="flex-1 min-w-0 flex items-center gap-2">
+                  <p className="text-sm font-medium truncate flex-1">
                     {convo.title || "New Conversation"}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <span className="text-[10px] text-muted-foreground shrink-0">
                     {formatDate(convo.updatedAt)}
-                  </p>
+                  </span>
                 </div>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                  className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
                   onClick={(e) => {
                     e.stopPropagation();
                     setDeleteTarget(convo);
                   }}
                 >
-                  <Trash2 className="h-3.5 w-3.5 text-muted-foreground hover:text-destructive" />
+                  <Trash2 className="h-3 w-3 text-muted-foreground hover:text-destructive" />
                 </Button>
               </div>
             ))}

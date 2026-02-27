@@ -16,12 +16,19 @@ const LETTERS = ["F", "R", "E", "D"] as const;
 interface FredMorphIconProps {
   size?: number;
   className?: string;
+  speed?: "normal" | "fast";
 }
 
-export function FredMorphIcon({ size = 48, className = "" }: FredMorphIconProps) {
+export function FredMorphIcon({ size = 48, className = "", speed = "normal" }: FredMorphIconProps) {
   const [currentPath, setCurrentPath] = useState(LETTER_PATHS.F);
   const letterIndexRef = useRef(0);
   const animationRef = useRef<number | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const isFast = speed === "fast";
+  const morphDuration = isFast ? 300 : 500;
+  const pauseDuration = isFast ? 400 : 1000;
+  const initialDelay = isFast ? 0 : 1000;
 
   const animateToNext = useCallback(() => {
     const fromIndex = letterIndexRef.current;
@@ -30,12 +37,11 @@ export function FredMorphIcon({ size = 48, className = "" }: FredMorphIconProps)
     const toPath = LETTER_PATHS[LETTERS[toIndex]];
 
     const morph = interpolate(fromPath, toPath, { maxSegmentLength: 10 });
-    const duration = 800;
     const startTime = performance.now();
 
     function step(now: number) {
       const elapsed = now - startTime;
-      const t = Math.min(elapsed / duration, 1);
+      const t = Math.min(elapsed / morphDuration, 1);
       // Ease in-out cubic
       const eased = t < 0.5
         ? 4 * t * t * t
@@ -47,45 +53,43 @@ export function FredMorphIcon({ size = 48, className = "" }: FredMorphIconProps)
         animationRef.current = requestAnimationFrame(step);
       } else {
         letterIndexRef.current = toIndex;
-        // Pause before next morph
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
           animationRef.current = requestAnimationFrame(() => animateToNext());
-        }, 1500);
+        }, pauseDuration);
       }
     }
 
     animationRef.current = requestAnimationFrame(step);
-  }, []);
+  }, [morphDuration, pauseDuration]);
 
   useEffect(() => {
-    // Start the animation loop after initial pause
-    const timeout = setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       animateToNext();
-    }, 2000);
+    }, initialDelay);
 
     return () => {
-      clearTimeout(timeout);
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [animateToNext]);
+  }, [animateToNext, initialDelay]);
 
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 1893 1827"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-label="FRED"
-      role="img"
-    >
-      <rect width="1893" height="1827" rx="374" fill="#D5BAFF" />
-      <path d={currentPath} fill="white">
-        <animate />
-      </path>
-    </svg>
+    <div className={isFast ? "animate-pulse" : undefined}>
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 1893 1827"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        aria-label="FRED"
+        role="img"
+      >
+        <rect width="1893" height="1827" rx="374" fill="#D5BAFF" />
+        <path d={currentPath} fill="white">
+          <animate />
+        </path>
+      </svg>
+    </div>
   );
 }

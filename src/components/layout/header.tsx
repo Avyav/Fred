@@ -57,25 +57,25 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="flex items-center space-x-4">
+        <nav className="flex items-center space-x-3">
           <Link
             href="/chat"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             Chat
           </Link>
           <Link
             href="/resources"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             Resources
           </Link>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-primary/10 text-primary text-xs">
+              <Button variant="ghost" className="relative h-7 w-7 rounded-full">
+                <Avatar className="h-7 w-7">
+                  <AvatarFallback className="bg-primary/10 text-primary text-[10px]">
                     {initials}
                   </AvatarFallback>
                 </Avatar>

@@ -1,8 +1,83 @@
+"use client";
+
+import { useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Phone, Shield, MapPin, Clock } from "lucide-react";
+import { animate } from "animejs";
 
 export default function HomePage() {
+  const cardsRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    const cards = cardsRef.current;
+    if (!cards) return;
+    const rect = cards.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const offsetX = ((e.clientX - centerX) / rect.width) * 10;
+    const offsetY = ((e.clientY - centerY) / rect.height) * 8;
+
+    const cardEls = cards.querySelectorAll<HTMLElement>("[data-card]");
+    cardEls.forEach((card, i) => {
+      const factor = 1 - i * 0.2;
+      animate(card, {
+        translateX: offsetX * factor,
+        translateY: offsetY * factor,
+        duration: 400,
+        ease: "outQuad",
+      });
+    });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    const cards = cardsRef.current;
+    if (!cards) return;
+    const cardEls = cards.querySelectorAll<HTMLElement>("[data-card]");
+    cardEls.forEach((card) => {
+      animate(card, {
+        translateX: 0,
+        translateY: 0,
+        duration: 600,
+        ease: "outQuad",
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    const cards = cardsRef.current;
+    if (!cards) return;
+
+    // Hover scale on individual cards
+    const cardEls = cards.querySelectorAll<HTMLElement>("[data-card]");
+    const handlers: Array<{ el: HTMLElement; enter: () => void; leave: () => void }> = [];
+
+    cardEls.forEach((card) => {
+      const enter = () => {
+        animate(card, { scale: 1.02, duration: 200, ease: "outQuad" });
+      };
+      const leave = () => {
+        animate(card, { scale: 1, duration: 200, ease: "outQuad" });
+      };
+      card.addEventListener("mouseenter", enter);
+      card.addEventListener("mouseleave", leave);
+      handlers.push({ el: card, enter, leave });
+    });
+
+    // Mouse-tracking parallax
+    document.addEventListener("mousemove", handleMouseMove);
+    cards.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      cards.removeEventListener("mouseleave", handleMouseLeave);
+      handlers.forEach(({ el, enter, leave }) => {
+        el.removeEventListener("mouseenter", enter);
+        el.removeEventListener("mouseleave", leave);
+      });
+    };
+  }, [handleMouseMove, handleMouseLeave]);
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Emergency Banner */}
@@ -43,13 +118,13 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 opacity-0 animate-fade-in-up-delay-3">
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center rounded-xl bg-primary px-8 py-3.5 text-base font-medium text-primary-foreground shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/25 hover:-translate-y-0.5 transition-all"
+              className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/25 hover:-translate-y-0.5 transition-all"
             >
               Get Started
             </Link>
             <Link
               href="/signin"
-              className="inline-flex items-center justify-center rounded-xl border border-input bg-background/80 backdrop-blur-sm px-8 py-3.5 text-base font-medium text-foreground shadow-sm hover:bg-background hover:-translate-y-0.5 transition-all"
+              className="inline-flex items-center justify-center rounded-lg border border-input bg-background/80 backdrop-blur-sm px-6 py-2.5 text-sm font-medium text-foreground shadow-sm hover:bg-background hover:-translate-y-0.5 transition-all"
             >
               Sign In
             </Link>
@@ -57,8 +132,11 @@ export default function HomePage() {
         </div>
 
         {/* Feature Cards */}
-        <div className="max-w-4xl mx-auto mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full opacity-0 animate-fade-in-up-delay-4">
-          <div className="rounded-2xl bg-white/70 backdrop-blur-sm border border-purple-100 p-6 text-center shadow-sm">
+        <div
+          ref={cardsRef}
+          className="max-w-4xl mx-auto mt-20 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full opacity-0 animate-fade-in-up-delay-4"
+        >
+          <div data-card className="rounded-2xl bg-white/70 backdrop-blur-sm border border-purple-100 p-6 text-center shadow-sm card-hover-lift will-change-transform">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50">
               <Shield className="h-6 w-6 text-primary" />
             </div>
@@ -67,7 +145,7 @@ export default function HomePage() {
               Your conversations are private and encrypted. No data is shared without your consent.
             </p>
           </div>
-          <div className="rounded-2xl bg-white/70 backdrop-blur-sm border border-purple-100 p-6 text-center shadow-sm">
+          <div data-card className="rounded-2xl bg-white/70 backdrop-blur-sm border border-purple-100 p-6 text-center shadow-sm card-hover-lift will-change-transform">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50">
               <MapPin className="h-6 w-6 text-primary" />
             </div>
@@ -76,7 +154,7 @@ export default function HomePage() {
               Connected to local mental health services, GPs, and community support across Victoria.
             </p>
           </div>
-          <div className="rounded-2xl bg-white/70 backdrop-blur-sm border border-purple-100 p-6 text-center shadow-sm">
+          <div data-card className="rounded-2xl bg-white/70 backdrop-blur-sm border border-purple-100 p-6 text-center shadow-sm card-hover-lift will-change-transform">
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50">
               <Clock className="h-6 w-6 text-primary" />
             </div>
@@ -108,8 +186,8 @@ export default function HomePage() {
           <h3 className="text-sm font-semibold text-foreground mb-4 text-center">
             24/7 Crisis Support
           </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-            <div className="text-center p-3 rounded-xl bg-white/80 border border-purple-100 shadow-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <div className="text-center p-2 rounded-lg bg-white/80 border border-purple-100 shadow-sm">
               <p className="font-medium text-foreground">Emergency</p>
               <a
                 href="tel:000"
@@ -118,7 +196,7 @@ export default function HomePage() {
                 000
               </a>
             </div>
-            <div className="text-center p-3 rounded-xl bg-white/80 border border-purple-100 shadow-sm">
+            <div className="text-center p-2 rounded-lg bg-white/80 border border-purple-100 shadow-sm">
               <p className="font-medium text-foreground">Lifeline</p>
               <a
                 href="tel:131114"
@@ -127,7 +205,7 @@ export default function HomePage() {
                 13 11 14
               </a>
             </div>
-            <div className="text-center p-3 rounded-xl bg-white/80 border border-purple-100 shadow-sm">
+            <div className="text-center p-2 rounded-lg bg-white/80 border border-purple-100 shadow-sm">
               <p className="font-medium text-foreground">Beyond Blue</p>
               <a
                 href="tel:1300224636"
@@ -136,7 +214,7 @@ export default function HomePage() {
                 1300 22 4636
               </a>
             </div>
-            <div className="text-center p-3 rounded-xl bg-white/80 border border-purple-100 shadow-sm">
+            <div className="text-center p-2 rounded-lg bg-white/80 border border-purple-100 shadow-sm">
               <p className="font-medium text-foreground">VIC Crisis Line</p>
               <a
                 href="tel:1300842747"
